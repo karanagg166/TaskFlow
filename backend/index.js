@@ -1,11 +1,12 @@
-const express = require('express');
-const dotenv = require('dotenv'); // Ensure correct path to .env
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
-const connect_Database = require('./config/database');
+const express = require("express");
+const dotenv = require("dotenv"); // Ensure correct path to .env
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const connect_Database = require("./config/database");
+const path = require("path");
 
-dotenv.config({ path: 'backend/config/config.env' });
+dotenv.config({ path: "backend/config/config.env" });
 const app = express();
 connect_Database();
 // Middleware setup
@@ -15,25 +16,26 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
 
-
-// Example route
-app.get('/', (req, res) => {
-    res.send('Backend server is running...');
-});
-
 // Port configuration
 const PORT = process.env.PORT || 5000;
-const user = require('./routes/user.routes');
+const user = require("./routes/user.routes");
 
-const task = require('./routes/tasks.routes');
-const group = require('./routes/groups.routes');
+const task = require("./routes/tasks.routes");
+const group = require("./routes/groups.routes");
 
-app.use('/api', user);
-app.use('/api', task);
-app.use('/api', group);
+app.use("/api", user);
+app.use("/api", task);
+app.use("/api", group);
+
+const dirname = path.resolve();
+
+app.use(express.static(path.join(dirname, "/frontend/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(dirname, "frontend", "dist", "index.html"));
+});
+
 // Start the server
-
-
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
