@@ -6,11 +6,13 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LockIcon from '@mui/icons-material/Lock';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const navigate = useNavigate(); // Initialize useNavigate
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -19,7 +21,10 @@ const LoginPage: React.FC = () => {
             console.log(response.data);
             const token = response.data.token; // Adjust according to your API response
             localStorage.setItem('token', token);
-            localStorage.setItem('id',response.data.user._id);
+            localStorage.setItem('id', response.data.user._id);
+            
+            // Navigate to the create task page after successful login
+            navigate('/user/createtask'); 
         } catch (error) {
             console.error("Error logging in:", error);
             // Handle error (e.g., show error message)

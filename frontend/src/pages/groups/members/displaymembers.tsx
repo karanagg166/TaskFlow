@@ -33,13 +33,12 @@ const MembersPage: React.FC = () => {
     const indexOfFirstMember = indexOfLastMember - membersPerPage;
     const currentMembers = combinedMembers.slice(indexOfFirstMember, indexOfLastMember);
 
-    const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
         setCurrentPage(value);
     };
 
     return (
         <div className="p-6 bg-gray-100 min-h-screen mt-30" style={{ paddingTop: "200px" }}>
-      {/* Add margin-top for space */}
             <Typography variant="h4" className="font-bold text-blue-800 mb-4">Group Members</Typography>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {currentMembers.map((member) => (
@@ -50,7 +49,7 @@ const MembersPage: React.FC = () => {
                             <Typography variant="body2" className="text-gray-600">Username : {member.username}</Typography>
                             <Typography variant="body2" className="text-gray-600">
                                 {admins.some(admin => admin._id === member._id) ? 'Admin' : 'Member'}
-                            </Typography> {/* Display Admin or Member */}
+                            </Typography>
                         </CardContent>
                     </Card>
                 ))}

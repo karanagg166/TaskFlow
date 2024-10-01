@@ -7,7 +7,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-
+import { useNavigate } from 'react-router-dom';
 const SignUpPage: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [username, setUsername] = useState<string>('');
@@ -15,7 +15,7 @@ const SignUpPage: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [showPassword, setShowPassword] = useState<boolean>(false);
-
+    const navigate = useNavigate(); // Initialize useNavigate
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (password !== confirmPassword) {
@@ -28,6 +28,7 @@ const SignUpPage: React.FC = () => {
             const token = response.data.token; // Adjust according to your API response
             localStorage.setItem('token', token);
             localStorage.setItem('id',response.data.user._id);
+            navigate('/user/createtask'); 
         } catch (error: unknown) { // Use unknown instead of any
             console.error("Error signing up:", error);
     

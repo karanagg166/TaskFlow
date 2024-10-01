@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router(); 
-const {getTaskCounts, create_personal_task, all_tasks, specific_tasks, change_status}=require('../controllers/task.controller');
+const {getTaskCounts, create_personal_task, all_tasks, specific_tasks, change_status, create_group_task, delete_task}=require('../controllers/task.controller');
 router.route("/:id/taskcount").get(getTaskCounts);
 router.route("/createtask").post(create_personal_task);
 router.route("/:id/alltasks").get(all_tasks);
 router.route("/:id/specifictasks").get(specific_tasks);
 router.route("/:taskId/change_status").post(change_status);
+router.route("/:id/create_group_task").post(create_group_task);
+router.route("/:id/:taskId/delete").delete(delete_task);
 module.exports = router; 

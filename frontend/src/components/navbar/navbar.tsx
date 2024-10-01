@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { FC, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, IconButton, Avatar } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -11,6 +11,7 @@ import axios from 'axios';
 const Navbar: FC = () => {
   const [user, setUser] = useState<{ name: string; avatar: string } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate(); // To navigate after logout
 
   useEffect(() => {
     const storedId = localStorage.getItem('id');
@@ -30,6 +31,14 @@ const Navbar: FC = () => {
 
     fetchData();
   }, []);
+
+  const handleLogout = () => {
+    // Clear all local storage items
+    localStorage.clear();
+
+    // Redirect to login page (assuming the login page route is "/login")
+    navigate('/user/login');
+  };
 
   return (
     <>
@@ -69,7 +78,7 @@ const Navbar: FC = () => {
               <>
                 <Typography className="text-white font-semibold">{user.name}</Typography>
                 <Avatar alt="User" src={user.avatar || "https://your-profile-pic-url.com/profile.jpg"} />
-                <IconButton color="inherit">
+                <IconButton color="inherit" onClick={handleLogout}>
                   <LogoutIcon className="text-white" />
                 </IconButton>
               </>

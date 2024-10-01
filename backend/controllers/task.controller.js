@@ -85,10 +85,8 @@ exports.create_personal_task=catchAsyncErrors(async(req,res,next)=>{
         priority,
         assignedUser,
         group,createdBy}=req.body;
-        console.log("ho");
+        
 const task=await Task.create({
-
-
     title,
     description,
     dueDate,
@@ -193,3 +191,56 @@ res.status(200).json(
 )
 
 })
+exports.create_group_task = catchAsyncErrors(async (req, res, next) => {
+    const { id } = req.params;
+
+    const {
+        title,
+        description,
+        dueDate,
+        status,
+        priority,
+        assignedUser,
+        group,
+        createdBy, // This should be in req.body, not being overwritten
+    } = req.body;
+
+    // Create the task
+    const task = await Task.create({
+        title,
+        description,
+        dueDate,
+        status: status || 'Pending', // Default status if not provided
+        priority,
+        assignedUser,
+        group,
+        createdBy: createdBy || id // Use createdBy from the request body or the id from the params
+    });
+
+    // Send a response with the created task
+    res.status(201).json({
+        success: true,
+        task,
+    });
+});
+exports.delete_task = catchAsyncErrors(async (req, res, next) => {
+    const { id, taskId } = req.params;
+  console.log(id,taskId);
+    // Attempt to delete the task
+    const result = await Task.deleteOne({ _id: taskId, createdBy: id });
+  
+    // Check if the task was actually deleted (result.deletedCount > 0)
+    if (result.deletedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Task not found or you're not authorized to delete this task",
+      });
+    }
+  
+    // If deletion was successful, send a success response
+    res.status(200).json({
+      success: true,
+      message: "Task deleted successfully",
+    });
+  });
+  

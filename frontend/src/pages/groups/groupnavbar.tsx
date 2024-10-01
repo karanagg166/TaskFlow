@@ -1,12 +1,12 @@
 // src/components/SideNavbar.tsx
 
 import { motion } from 'framer-motion';
-import { FaUsers, FaTasks, FaCog, FaInfoCircle, FaPlus } from 'react-icons/fa';
+import { FaUsers, FaTasks, FaCog, FaInfoCircle, FaPlus, FaSignInAlt, FaFileAlt } from 'react-icons/fa'; // Import report icon
 import { Button } from '@mui/material';
-import {  Link } from 'react-router-dom'; // Import useParams and Link
+import { Link } from 'react-router-dom'; // Import Link
 
 const SideNavbar = () => {
-  const  groupId=localStorage.getItem('groupId'); // Get the groupId from URL params
+  const groupId = localStorage.getItem('groupId'); // Get the groupId from local storage
 
   return (
     <motion.div
@@ -80,6 +80,32 @@ const SideNavbar = () => {
             />
             <span className="mt-2 text-xs text-white group-hover:text-purple-200 transition-all duration-300">
               Info
+            </span>
+          </motion.div>
+        </Link>
+
+        {/* Join Group */}
+        <Link to={`/group/joingroups`}>
+          <motion.div whileHover={{ scale: 1.1 }} className="group">
+            <Button
+              className="bg-indigo-500 hover:bg-indigo-700 w-12 h-12 rounded-full flex items-center justify-center"
+              startIcon={<FaSignInAlt className="text-white" />}
+            />
+            <span className="mt-2 text-xs text-white group-hover:text-purple-200 transition-all duration-300">
+              Join
+            </span>
+          </motion.div>
+        </Link>
+
+        {/* Report */}
+        <Link to={`/group/${groupId}/report`}>
+          <motion.div whileHover={{ scale: 1.1 }} className="group">
+            <Button
+              className="bg-gray-500 hover:bg-gray-700 w-12 h-12 rounded-full flex items-center justify-center"
+              startIcon={<FaFileAlt className="text-white" />}
+            />
+            <span className="mt-2 text-xs text-white group-hover:text-purple-200 transition-all duration-300">
+              Report
             </span>
           </motion.div>
         </Link>

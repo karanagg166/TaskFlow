@@ -58,7 +58,8 @@ const CreateTaskPage: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/createtask`, {
+const id=localStorage.getItem('id');
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/${id}/create_group_task`, {
         title,
         description,
         dueDate: dueDate ? dueDate.toISOString() : null,
@@ -66,7 +67,7 @@ const CreateTaskPage: React.FC = () => {
         priority,
         createdBy: userId,
         assignedUser,
-        groupId, // Include groupId in the request
+        group:groupId, // Include groupId in the request
       });
 
       setSuccessMessage(`Task created successfully: ${response.data.title}`);
