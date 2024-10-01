@@ -1,77 +1,85 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { TextField, MenuItem, Button } from '@mui/material';
-import { AiOutlineSearch } from 'react-icons/ai';
-import { FaFilter } from 'react-icons/fa';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
-import axios from 'axios';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { TextField, MenuItem, Button } from "@mui/material";
+import { AiOutlineSearch } from "react-icons/ai";
+import { FaFilter } from "react-icons/fa";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import axios from "axios";
 
 export interface Task {
-    _id: string; // Task ID
-    title: string;
-    description?: string; // Optional field
-    dueDate?: Date; // Optional field
-    status: 'Pending' | 'InProgress' | 'Completed';
-    assignedUser: string; // User ID (string)
-    priority: 'Low' | 'Medium' | 'High';
-    createdBy: string; // User ID (string)
-    group?: string; // Group ID (optional)
-    createdAt: string; // Timestamps
-    updatedAt: string; // Timestamps
-  }
-  interface TaskFilterProps {
-    onFilteredTasks: (tasks: Task[]) => void; // Define the type for the props
-  }
-  const TaskFilter: React.FC<TaskFilterProps> = ({ onFilteredTasks }) => {
-  const [status, setStatus] = useState('');
-  const [groupId, setGroupId] = useState('');
-  const [groupName, setGroupName] = useState('');
+  _id: any; // Task ID
+  title: string;
+  description?: string; // Optional field
+  dueDate?: Date; // Optional field
+  status: "Pending" | "InProgress" | "Completed";
+  assignedUser: string; // User ID (string)
+  priority: "Low" | "Medium" | "High";
+  createdBy: string; // User ID (string)
+  group?: string; // Group ID (optional)
+  createdAt: string; // Timestamps
+  updatedAt: string; // Timestamps
+}
+interface TaskFilterProps {
+  onFilteredTasks: (tasks: Task[]) => void; // Define the type for the props
+}
+const TaskFilter: React.FC<TaskFilterProps> = ({ onFilteredTasks }) => {
+  const [status, setStatus] = useState("");
+  const [groupId, setGroupId] = useState("");
+  const [groupName, setGroupName] = useState("");
   const [dueDate, setDueDate] = useState<dayjs.Dayjs | null>(null);
-  const [createTaskDate, setCreateTaskDate] = useState<dayjs.Dayjs | null>(null);
-  const [priority, setPriority] = useState('');
-  const [assignedBy, setAssignedBy] = useState('');
+  const [createTaskDate, setCreateTaskDate] = useState<dayjs.Dayjs | null>(
+    null
+  );
+  const [priority, setPriority] = useState("");
+  const [assignedBy, setAssignedBy] = useState("");
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const handleFilter = async () => {
-    const id = localStorage.getItem('id');
+    const id = localStorage.getItem("id");
     const filterData = {
       status,
       groupName, // You can keep groupId or groupName based on your need
-      dueDate: dueDate ? dueDate.format('YYYY-MM-DD') : null, // Format the date if available
+      dueDate: dueDate ? dueDate.format("YYYY-MM-DD") : null, // Format the date if available
       priority,
       createTaskDate,
       assignedBy,
     };
 
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/${id}/specifictasks`, {
-        params: filterData, // Pass the filter data as query parameters
-      });
- setTasks(response.data.tasks);
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/${id}/specifictasks`,
+        {
+          params: filterData, // Pass the filter data as query parameters
+        }
+      );
+      setTasks(response.data.tasks);
       console.log(tasks);
       setTasks(response.data.tasks);
-      console.log(response.data.tasks); 
+      console.log(response.data.tasks);
       onFilteredTasks(response.data.tasks);
-
     } catch (error) {
-      console.error('Error fetching tasks:', error);
+      console.error("Error fetching tasks:", error);
       // Handle error (e.g., show a notification to the user)
     }
   };
 
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-300 via-blue-400 to-blue-500 pt-40 px-4" style={{ paddingTop: '180px', paddingBottom: '80px' }}>
+    <div
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-300 via-blue-400 to-blue-500 pt-40 px-4"
+      style={{ paddingTop: "180px", paddingBottom: "80px" }}
+    >
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         className="bg-white shadow-2xl rounded-xl p-8 max-w-lg w-full mx-4"
       >
-        <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">Filter Your Tasks</h1>
+        <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">
+          Filter Your Tasks
+        </h1>
 
         <motion.div
           whileHover={{ scale: 1.05 }}
@@ -99,7 +107,7 @@ export interface Task {
             value={groupId}
             onChange={(e) => {
               setGroupId(e.target.value);
-              setGroupName(''); // Reset group name when group ID changes
+              setGroupName(""); // Reset group name when group ID changes
             }}
             variant="outlined"
             className="w-full"
@@ -110,7 +118,7 @@ export interface Task {
           </TextField>
 
           {/* Conditionally Render Group Name Field */}
-          {groupId === 'team' && (
+          {groupId === "team" && (
             <TextField
               label="Group Name"
               value={groupName}
@@ -137,12 +145,12 @@ export interface Task {
               label="Due Date"
               value={dueDate}
               onChange={(newValue) => setDueDate(newValue)}
-              slots={{ textField: TextField }}  // Specify the TextField slot
+              slots={{ textField: TextField }} // Specify the TextField slot
               slotProps={{
                 textField: {
-                  variant: 'outlined',
+                  variant: "outlined",
                   fullWidth: true,
-                  margin: 'normal',
+                  margin: "normal",
                   required: true,
                 },
               }}
@@ -155,12 +163,12 @@ export interface Task {
               label="Create Task Date"
               value={createTaskDate}
               onChange={(newValue) => setCreateTaskDate(newValue)}
-              slots={{ textField: TextField }}  // Specify the TextField slot
+              slots={{ textField: TextField }} // Specify the TextField slot
               slotProps={{
                 textField: {
-                  variant: 'outlined',
+                  variant: "outlined",
                   fullWidth: true,
-                  margin: 'normal',
+                  margin: "normal",
                   required: true,
                 },
               }}
@@ -203,13 +211,13 @@ export interface Task {
             fullWidth
             startIcon={<AiOutlineSearch />}
             onClick={() => {
-              setStatus('');
-              setGroupId('');
-              setGroupName('');
+              setStatus("");
+              setGroupId("");
+              setGroupName("");
               setDueDate(null);
               setCreateTaskDate(null);
-              setPriority('');
-              setAssignedBy('');
+              setPriority("");
+              setAssignedBy("");
             }}
             className="mt-2"
           >

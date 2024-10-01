@@ -1,11 +1,17 @@
-import { useState, useEffect } from 'react';
-import { TextField, Button, CircularProgress, Typography } from '@mui/material';
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { TextField, Button, CircularProgress, Typography } from "@mui/material";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const GroupSearchPage = () => {
-  const [groups, setGroups] = useState<{ id: string; name: string }[]>([]);
-  const [searchName, setSearchName] = useState('');
+  const [groups, setGroups] = useState<
+    {
+      _id: any;
+      id: any;
+      name: string;
+    }[]
+  >([]);
+  const [searchName, setSearchName] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -14,7 +20,9 @@ const GroupSearchPage = () => {
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getallgroups`); // Adjust the endpoint according to your backend
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/getallgroups`
+        ); // Adjust the endpoint according to your backend
         const data = await response.json();
 
         if (!data.success) {
@@ -24,12 +32,11 @@ const GroupSearchPage = () => {
         setGroups(data.groups);
       } catch (err: unknown) {
         if (err instanceof Error) {
-            setError(err.message); // Safely access the message property
+          setError(err.message); // Safely access the message property
         } else {
-            setError('Failed to fetch groups');
+          setError("Failed to fetch groups");
         }
-    }
-     finally {
+      } finally {
         setLoading(false);
       }
     };
@@ -38,7 +45,7 @@ const GroupSearchPage = () => {
   }, []);
 
   // Filter groups based on the search input
-  const filteredGroups = groups.filter(group =>
+  const filteredGroups = groups.filter((group) =>
     group.name.toLowerCase().includes(searchName.toLowerCase())
   );
 
@@ -58,7 +65,10 @@ const GroupSearchPage = () => {
       >
         Search Groups
       </motion.h1>
-      <form onSubmit={(e) => e.preventDefault()} className="mb-6 w-full max-w-md">
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className="mb-6 w-full max-w-md"
+      >
         <motion.div
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -75,7 +85,11 @@ const GroupSearchPage = () => {
         </motion.div>
       </form>
       {loading && <CircularProgress size={24} color="inherit" />}
-      {error && <Typography variant="body1" className="text-red-500 mb-4">{error}</Typography>}
+      {error && (
+        <Typography variant="body1" className="text-red-500 mb-4">
+          {error}
+        </Typography>
+      )}
       {filteredGroups.length > 0 && (
         <motion.ul
           initial={{ opacity: 0, y: 20 }}
@@ -84,8 +98,13 @@ const GroupSearchPage = () => {
           className="w-full max-w-md bg-white rounded-lg shadow-lg p-4"
         >
           {filteredGroups.map((group) => (
-            <li key={group.id} className="flex justify-between items-center text-lg text-gray-800 border-b last:border-b-0 py-2">
-              <span>{group.name} (ID: {group._id})</span>
+            <li
+              key={group.id}
+              className="flex justify-between items-center text-lg text-gray-800 border-b last:border-b-0 py-2"
+            >
+              <span>
+                {group.name} (ID: {group._id})
+              </span>
               <Button
                 variant="contained"
                 color="primary"
@@ -99,7 +118,9 @@ const GroupSearchPage = () => {
         </motion.ul>
       )}
       {filteredGroups.length === 0 && !loading && !error && (
-        <Typography variant="body1" className="text-white mt-4">No groups found.</Typography>
+        <Typography variant="body1" className="text-white mt-4">
+          No groups found.
+        </Typography>
       )}
     </div>
   );

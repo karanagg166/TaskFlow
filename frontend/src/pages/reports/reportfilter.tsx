@@ -18,7 +18,7 @@ import dayjs from "dayjs";
 
 // Define the Task interface
 interface Task {
-  _id: string; // Change id to _id to match backend
+  _id: any; // Change id to _id to match backend
   title: string; // Updated to match backend property
   status: string; // This can be "completed" | "pending" | "overdue"
   description: string;
@@ -39,7 +39,8 @@ const TaskSummaryReport = () => {
   const [priorityFilter, setPriorityFilter] = useState<string>("");
   const [assignedByFilter, setAssignedByFilter] = useState<string>("");
   const [dueDateFilter, setDueDateFilter] = useState<dayjs.Dayjs | null>(null);
-  const [createTaskDateFilter, setCreateTaskDateFilter] = useState<dayjs.Dayjs | null>(null);
+  const [createTaskDateFilter, setCreateTaskDateFilter] =
+    useState<dayjs.Dayjs | null>(null);
 
   const fetchTasks = async () => {
     setLoading(true);
@@ -54,7 +55,9 @@ const TaskSummaryReport = () => {
             priority: priorityFilter,
             assignedBy: assignedByFilter,
             dueDate: dueDateFilter ? dueDateFilter.format("YYYY-MM-DD") : null,
-            createTaskDate: createTaskDateFilter ? createTaskDateFilter.format("YYYY-MM-DD") : null,
+            createTaskDate: createTaskDateFilter
+              ? createTaskDateFilter.format("YYYY-MM-DD")
+              : null,
           },
         }
       );
@@ -69,11 +72,27 @@ const TaskSummaryReport = () => {
 
   useEffect(() => {
     fetchTasks();
-  }, [statusFilter, priorityFilter, assignedByFilter, dueDateFilter, createTaskDateFilter]);
+  }, [
+    statusFilter,
+    priorityFilter,
+    assignedByFilter,
+    dueDateFilter,
+    createTaskDateFilter,
+  ]);
 
   const handleDownload = () => {
     const csvContent = [
-      ["ID", "Title", "Status", "Description", "Due Date", "Priority", "Assigned By", "Created By", "Group"], // CSV header
+      [
+        "ID",
+        "Title",
+        "Status",
+        "Description",
+        "Due Date",
+        "Priority",
+        "Assigned By",
+        "Created By",
+        "Group",
+      ], // CSV header
       ...tasks.map((task) => [
         task._id, // Changed to _id to match task property
         task.title, // Changed to title to match task property
@@ -81,9 +100,9 @@ const TaskSummaryReport = () => {
         task.description,
         task.dueDate,
         task.priority,
-        task.assignedBy?.name || 'N/A', // Ensure this matches the structure
-        task.createdBy?.name || 'N/A', // Ensure this matches the structure
-        task.group?.name || 'N/A', // Ensure this matches the structure
+        task.assignedBy?.name || "N/A", // Ensure this matches the structure
+        task.createdBy?.name || "N/A", // Ensure this matches the structure
+        task.group?.name || "N/A", // Ensure this matches the structure
       ]),
     ]
       .map((row) => row.join(",")) // Join each row with commas
@@ -189,7 +208,10 @@ const TaskSummaryReport = () => {
           {tasks.map((task) => (
             <li key={task._id} className="py-2 border-b last:border-b-0">
               <Typography variant="body1" className="text-gray-800">
-                {task.title} - {task.status} - Due: {task.dueDate} - Priority: {task.priority} - Assigned By: {task.assignedBy?.name || 'N/A'} - Created By: {task.createdBy?.name || 'N/A'} - Group: {task.group?.name || 'N/A'}
+                {task.title} - {task.status} - Due: {task.dueDate} - Priority:{" "}
+                {task.priority} - Assigned By: {task.assignedBy?.name || "N/A"}{" "}
+                - Created By: {task.createdBy?.name || "N/A"} - Group:{" "}
+                {task.group?.name || "N/A"}
               </Typography>
             </li>
           ))}
