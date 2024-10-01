@@ -9,7 +9,7 @@ interface GroupInfo {
   name: string;
   description: string;
   createdBy: {
-    _id: string;
+    _id: any;
     name: string; // Assuming createdBy is an object with name and id
   };
   createdAt: string; // Keep it as a string for formatting
@@ -28,7 +28,9 @@ const GroupEntryPage = () => {
       if (!groupId) return; // Check if groupId exists
 
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/${groupId}/info`); // Use the groupId in the API call
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/${groupId}/info`
+        ); // Use the groupId in the API call
         setGroupInfo(response.data.group);
         console.log(response.data.group); // Assuming the response contains the group information under the `group` property
       } catch (error) {
@@ -67,7 +69,11 @@ const GroupEntryPage = () => {
 
   // Helper function to format date string
   const formatDateString = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
+    const options: Intl.DateTimeFormatOptions = {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
@@ -89,11 +95,18 @@ const GroupEntryPage = () => {
             >
               {groupInfo.name} {/* Display the group name */}
             </motion.h1>
-
-            <p className="text-center text-gray-500">Created by {groupInfo.createdBy.name}</p> {/* Updated to access name */}
-            <p className="text-center text-gray-400">Created at {formatDateString(groupInfo.createdAt)}</p> {/* Format the date */}
-            <p className="text-center text-gray-600">{groupInfo.description}</p> {/* Display group description */}
-
+            <p className="text-center text-gray-500">
+              Created by {groupInfo.createdBy.name}
+            </p>{" "}
+            {/* Updated to access name */}
+            <p className="text-center text-gray-400">
+              Created at {formatDateString(groupInfo.createdAt)}
+            </p>{" "}
+            {/* Format the date */}
+            <p className="text-center text-gray-600">
+              {groupInfo.description}
+            </p>{" "}
+            {/* Display group description */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <TextField
@@ -116,13 +129,19 @@ const GroupEntryPage = () => {
                   disabled={loading}
                   fullWidth
                 >
-                  {loading ? <CircularProgress size={24} color="inherit" /> : "Join Group"}
+                  {loading ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    "Join Group"
+                  )}
                 </Button>
               </div>
             </form>
           </>
         ) : (
-          <div className="text-center text-gray-500">Loading group information...</div> // Loading state for group info
+          <div className="text-center text-gray-500">
+            Loading group information...
+          </div> // Loading state for group info
         )}
       </motion.div>
     </div>
