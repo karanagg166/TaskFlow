@@ -1,0 +1,25 @@
+/* src/app.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ensure the root element takes full width and height */
+#root {
+  height: 100vh;    /* Full height of the viewport */
+  width: 100vw;     /* Full width of the viewport */
+  margin: 0;        /* Remove default margin */
+  padding: 0;       /* Remove default padding */
+  display: flex;    /* Enable flexbox for centering */
+  justify-content: center;  /* Center horizontally */
+  align-items: center;      /* Center vertically */
+  text-align: center;       /* Center text */
+  background-color: #f4f2f2; /* Fallback background color */
+}
+
+/* Optional: Make sure to reset any other styles that may interfere */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;  /* Ensure body and html take full height */
+  width: 100%;   /* Ensure body and html take full width */
+}
