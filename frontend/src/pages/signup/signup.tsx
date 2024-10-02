@@ -23,7 +23,8 @@ const SignUpPage: React.FC = () => {
             return;
         }
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/register`, { email, username, name, password }); // Include name in the request
+            //${import.meta.env.VITE_BACKEND_URL}
+            const response = await axios.post(`/api/register`, { email, username, name, password }); // Include name in the request
             console.log(response.data);
             const token = response.data.token; // Adjust according to your API response
             localStorage.setItem('token', token);

@@ -72,13 +72,10 @@ const TaskSummaryReport = () => {
 
   useEffect(() => {
     fetchTasks();
-  }, [
-    statusFilter,
-    priorityFilter,
+  }, [statusFilter, priorityFilter,
     assignedByFilter,
     dueDateFilter,
-    createTaskDateFilter,
-  ]);
+    createTaskDateFilter,]);
 
   const handleDownload = () => {
     const csvContent = [
